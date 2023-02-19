@@ -9,6 +9,7 @@ import { TrackFeature } from '../data/track-feature';
 
 import { lastValueFrom } from 'rxjs';
 import { ArtistPageComponent } from '../pages/artist-page/artist-page.component';
+import { discardPeriodicTasks } from '@angular/core/testing';
 
 @Injectable({
   providedIn: 'root'
@@ -92,21 +93,36 @@ export class SpotifyService {
 
   getAlbum(albumId:string):Promise<AlbumData> {
     //TODO: use the album endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/album/' + encodeURIComponent(albumId)).then((data) => {
+      return new AlbumData(data);
+    })
   }
 
   getTracksForAlbum(albumId:string):Promise<TrackData[]> {
     //TODO: use the tracks for album endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/album-tracks/' + encodeURIComponent(albumId)).then((data) => {
+      return data.items.map(track => new TrackData(track));
+    })
   }
 
   getTrack(trackId:string):Promise<TrackData> {
     //TODO: use the track endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/track/' + encodeURIComponent(trackId)).then((data) => {
+      return new TrackData(data);
+    })
   }
 
   getAudioFeaturesForTrack(trackId:string):Promise<TrackFeature[]> {
     //TODO: use the audio features for track endpoint to make a request to express.
-    return null as any;
+    return this.sendRequestToExpress('/track-audio-features/' + encodeURIComponent(trackId)).then((data) => {
+      const tfList: TrackFeature[] = [];
+      for (let tf in data) {
+        let value = data[tf];
+        if(TrackFeature.FeatureTypes.indexOf(tf) > -1) {
+          tfList.push(new TrackFeature(tf, value))
+        } 
+      }
+      return tfList;
+    })
   }
 }
