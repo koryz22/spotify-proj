@@ -30,7 +30,6 @@ export class TrackPageComponent implements OnInit {
     });
     this.spotifyService.getAudioFeaturesForTrack(this.trackId).then((audioFeaturesData) => {
       this.audioFeatures = audioFeaturesData;
-      console.log(this.audioFeatures);
     });
   }
 }

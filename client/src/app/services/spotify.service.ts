@@ -38,7 +38,6 @@ export class SpotifyService {
   aboutMe():Promise<ProfileData> {
     //This line is sending a request to express, which returns a promise with some data. We're then parsing the data 
     return this.sendRequestToExpress('/me').then((data) => {
-      console.log(data)
       return new ProfileData(data);
     });
   }
